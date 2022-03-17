@@ -1,4 +1,15 @@
 package com.dontexist.characters;
 
-public class Merchant extends Personage{
+import com.dontexist.interfaces.Seller;
+
+public class Merchant extends FairytaleCharacter implements Seller {
+
+    public Merchant() {
+        super("Merchant", 15, 100, 30, 100, 20);
+    }
+
+    @Override
+    public void selling() {
+
+    }
 }
