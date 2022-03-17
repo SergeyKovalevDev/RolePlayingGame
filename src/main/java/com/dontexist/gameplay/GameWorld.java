@@ -1,8 +1,11 @@
 package com.dontexist.gameplay;
 
 import com.dontexist.characters.*;
+import com.dontexist.characters.FairytaleCharacter;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.function.BiPredicate;
 
 @Getter
 @Setter
@@ -11,6 +14,11 @@ public class GameWorld {
     private final Merchant merchant;
     private Goblin goblin;
     private Skeleton skeleton;
+
+    BiPredicate<FairytaleCharacter, FairytaleCharacter> attackImplementation = (ch1, ch2) -> {
+        if (ch1.getDexterity() * 3.0 > (Math.random() * 100)) ch2.setHealth(ch2.getHealth() - ch1.getStrength());
+        return ch2.getHealth() <= 0;
+    };
 
     public GameWorld(Hero hero) {
         this.hero = hero;
@@ -28,7 +36,7 @@ public class GameWorld {
             boolean isExit = false;
             while (!isExit) {
                 System.out.println("Атакует " + (isHeroAttackFirst[0] ? hero.getName() : enemy.getName()));
-                isExit = isHeroAttackFirst[0] ? hero.attack(enemy) : enemy.attack(hero);
+                isExit = isHeroAttackFirst[0] ? hero.attack(attackImplementation, enemy) : enemy.attack(attackImplementation, hero);
 
                 try {
                     Thread.sleep(1000);
@@ -49,8 +57,9 @@ public class GameWorld {
                 System.out.printf("""
                         Поздравляем! Вы победили!
                         Вы забираете золото и получаете опыт
-                        Ваше золото: %d
-                        Ваш опыт: %d%n""", hero.getGold(), hero.getExperience());
+                        Золото: %d
+                        Опыт: %d
+                        Здоровье: %d%n""", hero.getGold(), hero.getExperience(), hero.getHealth());
             }
         });
         battleThread.start();
