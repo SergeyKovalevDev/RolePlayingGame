@@ -4,7 +4,7 @@ import com.dontexist.characters.Enemy;
 import com.dontexist.characters.Goblin;
 import com.dontexist.characters.Hero;
 import com.dontexist.characters.Skeleton;
-import com.dontexist.gameplay.GameWorld;
+import com.dontexist.gameworld.GameWorld;
 
 import java.io.BufferedReader;
 import java.io.IOException;

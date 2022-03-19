@@ -1,4 +1,4 @@
-package com.dontexist.gameplay;
+package com.dontexist.gameworld;
 
 import com.dontexist.characters.*;
 import com.dontexist.characters.FairytaleCharacter;
