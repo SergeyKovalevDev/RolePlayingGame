@@ -1,10 +1,8 @@
 package com.dontexist.characters;
 
-import com.dontexist.interfaces.Customer;
+import com.dontexist.potions.Potion;
 
-import java.util.function.BiPredicate;
-
-public class Hero extends FairytaleCharacter implements Customer {
+public class Hero extends FairytaleCharacter {
     private static final int INITIAL_HERO_DEXTERITY = 20;
     private static final int INITIAL_HERO_HEALTH = 100;
     private static final int INITIAL_HERO_EXPERIENCE = 0;
@@ -16,8 +14,8 @@ public class Hero extends FairytaleCharacter implements Customer {
                 INITIAL_HERO_EXPERIENCE, INITIAL_HERO_GOLD, INITIAL_HERO_STRENGTH);
     }
 
-    @Override
-    public void buying() {
-
+    public void purchasePotion(Potion potion) {
+        gold = gold - potion.getCost();
+        potion.application(this, potion);
     }
 }

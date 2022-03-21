@@ -27,4 +27,19 @@ public abstract class FairytaleCharacter {
     public boolean attack(BiPredicate<FairytaleCharacter, FairytaleCharacter> attackImplementation, FairytaleCharacter enemy) {
         return attackImplementation.test(this, enemy);
     }
+
+    @Override
+    public String toString() {
+        return String.format("""
+                Здоровье - %d
+                Ловкость - %d
+                Опыт - %d
+                Сила - %d
+                Золото - %d""",
+                health,
+                dexterity,
+                experience,
+                strength,
+                gold);
+    }
 }
