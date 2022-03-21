@@ -1,15 +1,17 @@
 package com.dontexist.characters;
 
-import com.dontexist.interfaces.Seller;
+import com.dontexist.potions.Potion;
+import lombok.Getter;
 
-public class Merchant extends FairytaleCharacter implements Seller {
+@Getter
+public class Merchant extends FairytaleCharacter {
+
 
     public Merchant() {
-        super("Merchant", 15, 100, 30, 100, 20);
+        super("Торговец", 15, 100, 30, 100, 20);
     }
 
-    @Override
-    public void selling() {
-
+    public void sellPotion(Potion potion) {
+        gold += potion.getCost();
     }
 }

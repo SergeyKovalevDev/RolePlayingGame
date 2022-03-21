@@ -1,7 +1,8 @@
-package com.dontexist.gameplay;
+package com.dontexist.gameworld;
 
 import com.dontexist.characters.*;
 import com.dontexist.characters.FairytaleCharacter;
+import com.dontexist.potions.Potion;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +20,13 @@ public class GameWorld {
         if (ch1.getDexterity() * 3.0 > (Math.random() * 100)) ch2.setHealth(ch2.getHealth() - ch1.getStrength());
         return ch2.getHealth() <= 0;
     };
+
+    Potion healthPotion = new Potion("зелье здоровья", 10, 20,
+            (hero, potion) -> hero.setHealth(hero.getHealth() + potion.getEffect()));
+    Potion dexterityPotion = new Potion("зелье ловкости", 30, 100,
+            (hero, potion) -> hero.setDexterity(hero.getDexterity() + potion.getEffect()));
+    Potion strengthPotion = new Potion("зелье силы", 20, 50,
+            (hero, potion) -> hero.setStrength(hero.getStrength() + potion.getEffect()));
 
     public GameWorld(Hero hero) {
         this.hero = hero;
@@ -71,7 +79,15 @@ public class GameWorld {
         return hero.getHealth() > 0;
     }
 
-    public void trading() {
-        System.out.println("Торговец еще не вышел на работу");
-    }
+//    public void purchasePotion(Potion potion) {
+//        int cost = potion.getCost();
+//        if (hero.getGold() < cost) {
+//            System.out.println("Увы, у вас недостаточно золота");
+//        } else {
+//            merchant.setGold(merchant.getGold() + cost);
+//            hero.setGold(hero.getGold() - cost);
+//            potion.application(hero, potion);
+//            System.out.println("Желаете приобрести еще зелья?");
+//        }
+//    }
 }
