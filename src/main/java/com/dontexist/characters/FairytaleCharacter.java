@@ -3,8 +3,6 @@ package com.dontexist.characters;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.function.BiPredicate;
-
 @Getter
 @Setter
 public abstract class FairytaleCharacter {
@@ -24,8 +22,11 @@ public abstract class FairytaleCharacter {
         this.strength = strength;
     }
 
-    public boolean attack(BiPredicate<FairytaleCharacter, FairytaleCharacter> attackImplementation, FairytaleCharacter enemy) {
-        return attackImplementation.test(this, enemy);
+    public boolean attack(FairytaleCharacter enemy) {
+        if (this.getDexterity() * 3.0 > (Math.random() * 100)) {
+            enemy.setHealth(Math.max((enemy.getHealth() - this.getStrength()), 0));
+        }
+        return enemy.getHealth() <= 0;
     }
 
     @Override

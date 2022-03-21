@@ -1,8 +1,10 @@
 package com.dontexist;
 
-import com.dontexist.characters.*;
+import com.dontexist.characters.Enemy;
+import com.dontexist.characters.Goblin;
+import com.dontexist.characters.Hero;
+import com.dontexist.characters.Skeleton;
 import com.dontexist.gameworld.GameWorld;
-import com.dontexist.potions.Potion;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +13,16 @@ import java.io.InputStreamReader;
 public class GameplayManagement {
     private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     private GameWorld gameWorld;
+    private static final String MM_TRADE = "1";
+    private static final String MM_BATTLE = "2";
+    private static final String MM_EXIT = "3";
+    private static final String BMM_RETURN = "1";
+    private static final String BMM_CONTINUE = "2";
+    private static final String TMM_HEALTH_POTION = "1";
+    private static final String TMM_DEXTERITY_POTION = "2";
+    private static final String TMM_STRENGTH_POTION = "3";
+    private static final String TMM_EXIT = "4";
+
 
     static {
         System.out.println("===Welcome to Role-playing Game!===");
@@ -24,16 +36,17 @@ public class GameplayManagement {
         System.out.print("Введите имя героя: ");
         String heroName = reader.readLine();
         gameWorld = new GameWorld(new Hero(heroName));
+        System.out.println("Вы сейчас в городе");
         showMainMenu();
         boolean isExit = false;
         while (!isExit) {
-            switch (reader.readLine()) {//TODO заменить символы на константы
-                case "1" -> {
+            switch (reader.readLine()) {
+                case MM_TRADE -> {
                     tradeManagement();
                     showMainMenu();
                 }
-                case "2" -> isExit = battleManagement();
-                case "3" -> {
+                case MM_BATTLE -> isExit = battleManagement();
+                case MM_EXIT -> {
                     System.out.println("Выход из игры. Ждем Вас снова в нашей увлекательной игре!");
                     isExit = true;
                 }
@@ -46,12 +59,12 @@ public class GameplayManagement {
     }
 
     private void showMainMenu() {
-        System.out.println("""
-                Вы сейчас в городе.
+        System.out.printf("""
                 Куда вы хотите пойти?
-                1. К торговцу
-                2. В темный лес
-                3. На выход""");//TODO заменить символы на константы
+                %s. К торговцу
+                %s. В темный лес
+                %s. На выход%n""",
+                MM_TRADE, MM_BATTLE, MM_EXIT);
     }
 
     private boolean battleManagement() throws IOException {
@@ -62,8 +75,8 @@ public class GameplayManagement {
             else gameWorld.setSkeleton(new Skeleton());
             showBattleManagementMenu();
             switch (reader.readLine()) {
-                case "1" -> showMainMenu();//TODO заменить символы на константы
-                case "2" -> {
+                case BMM_RETURN -> showMainMenu();
+                case BMM_CONTINUE -> {
                     return battleManagement();
                 }
                 default -> {
@@ -79,22 +92,24 @@ public class GameplayManagement {
     }
 
     private void showBattleManagementMenu() {
-        System.out.println("""
+        System.out.printf("""
                 Вы можете:
-                1. Вернуться в город
-                2. Продолжить бой""");//TODO заменить символы на константы
+                %s. Вернуться в город
+                %s. Продолжить бой%n""",
+                BMM_RETURN, BMM_CONTINUE);
     }
 
     private void tradeManagement() throws IOException {
+        System.out.println("Приветствую тебя, Воин!");
         showTradeManagementMenu();
         boolean isExit = false;
         while (!isExit) {
-            switch (reader.readLine()) {//TODO заменить символы на константы
-                case "1" -> potionTrading(gameWorld.getHealthPotion());
-                case "2" -> potionTrading(gameWorld.getDexterityPotion());
-                case "3" -> potionTrading(gameWorld.getStrengthPotion());
-                case "4" -> {
-                    System.out.println("Приходи еще, воин");
+            switch (reader.readLine()) {
+                case TMM_HEALTH_POTION -> gameWorld.potionTrading(gameWorld.getHealthPotion());
+                case TMM_DEXTERITY_POTION -> gameWorld.potionTrading(gameWorld.getDexterityPotion());
+                case TMM_STRENGTH_POTION -> gameWorld.potionTrading(gameWorld.getStrengthPotion());
+                case TMM_EXIT -> {
+                    System.out.println("Приходи еще, Воин");
                     isExit = true;
                 }
                 default -> {
@@ -107,29 +122,14 @@ public class GameplayManagement {
 
     private void showTradeManagementMenu() {
         System.out.printf("""
-                        Приветствую тебя, воин!
                         Что желаешь приобрести:
-                        1. Зелье здоровья, добавляет %d единиц к здоровю - %d золотых монет
-                        2. Зелье ловкости, добавляет %d единиц к ловкости - %d золотых монет
-                        3. Зелье силы, добавляет %d единиц к силе - %d золотых монет
-                        4. Выйти не приобретая зелье%n""",
-                gameWorld.getHealthPotion().getEffect(), gameWorld.getHealthPotion().getCost(),
-                gameWorld.getDexterityPotion().getEffect(), gameWorld.getDexterityPotion().getCost(),
-                gameWorld.getStrengthPotion().getEffect(), gameWorld.getStrengthPotion().getCost()
-        );//TODO заменить символы на константы
-    }
-
-    private void potionTrading(Potion potion) {
-        Hero hero = gameWorld.getHero();
-        Merchant merchant = gameWorld.getMerchant();
-        if (hero.getGold() >= potion.getCost()) {
-            merchant.sellPotion(potion);
-            hero.purchasePotion(potion);
-            System.out.println("Вы приобрели " + potion.getPrintedName());
-            System.out.println(hero);
-            System.out.println("Какое зелье желаете проибрести еще?");
-        } else {
-            System.out.println("Увы, у вас недостаточно золота");
-        }
+                        %s. Зелье здоровья, добавляет %d единиц к здоровю - %d золотых монет
+                        %s. Зелье ловкости, добавляет %d единиц к ловкости - %d золотых монет
+                        %s. Зелье силы, добавляет %d единиц к силе - %d золотых монет
+                        %s. Выйти не приобретая зелье%n""",
+                TMM_HEALTH_POTION, gameWorld.getHealthPotion().getEffect(), gameWorld.getHealthPotion().getCost(),
+                TMM_DEXTERITY_POTION, gameWorld.getDexterityPotion().getEffect(), gameWorld.getDexterityPotion().getCost(),
+                TMM_STRENGTH_POTION, gameWorld.getStrengthPotion().getEffect(), gameWorld.getStrengthPotion().getCost(),
+                TMM_EXIT);
     }
 }
