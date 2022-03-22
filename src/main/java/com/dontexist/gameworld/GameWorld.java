@@ -13,12 +13,12 @@ public class GameWorld {
     private Goblin goblin;
     private Skeleton skeleton;
 
-    Potion healthPotion = new Potion("зелье здоровья", 10, 20,
-            (hero, potion) -> hero.setHealth(hero.getHealth() + potion.getEffect()));
-    Potion dexterityPotion = new Potion("зелье ловкости", 30, 100,
-            (hero, potion) -> hero.setDexterity(hero.getDexterity() + potion.getEffect()));
-    Potion strengthPotion = new Potion("зелье силы", 20, 50,
-            (hero, potion) -> hero.setStrength(hero.getStrength() + potion.getEffect()));
+    Potion healthPotion = new Potion("зелье здоровья", 50, 20,
+            (hero, potion) -> hero.addHealth(potion.getEffect()));
+    Potion dexterityPotion = new Potion("зелье ловкости", 5, 100,
+            (hero, potion) -> hero.addDexterity(potion.getEffect()));
+    Potion strengthPotion = new Potion("зелье силы", 5, 50,
+            (hero, potion) -> hero.addStrength(potion.getEffect()));
 
     public GameWorld(Hero hero) {
         this.hero = hero;
@@ -52,14 +52,18 @@ public class GameWorld {
             System.out.println("Бой окончен");
             if (hero.getHealth() <= 0) System.out.println("Увы, Вы проиграли");
             else {
-                hero.setGold(hero.getGold() + enemy.getGold());
-                hero.setExperience(hero.getExperience() + enemy.getExperience());
+                hero.addGold(enemy.getGold());
+                boolean isDexterityInc = hero.addExperience(enemy.getExperience());
                 System.out.printf("""
                         Поздравляем! Вы победили!
                         Вы забираете золото и получаете опыт
                         Золото: %d
                         Опыт: %d
                         Здоровье: %d%n""", hero.getGold(), hero.getExperience(), hero.getHealth());
+                if (isDexterityInc) {
+                    System.out.println("У Вас увеличилась ловкость!\n" +
+                            "Ловкость: " + hero.getDexterity());
+                }
             }
         });
         battleThread.start();
