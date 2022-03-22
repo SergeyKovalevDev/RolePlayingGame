@@ -9,22 +9,19 @@ import lombok.Setter;
 @Setter
 public class GameWorld {
     private final Hero hero;
-    private final Merchant merchant;
-    private Goblin goblin;
-    private Skeleton skeleton;
+    private final Merchant merchant = new Merchant();
+    private Goblin goblin = new Goblin();
+    private Skeleton skeleton = new Skeleton();
 
-    Potion healthPotion = new Potion("зелье здоровья", 50, 20,
+    private final Potion healthPotion = new Potion("зелье здоровья", 50, 20,
             (hero, potion) -> hero.addHealth(potion.getEffect()));
-    Potion dexterityPotion = new Potion("зелье ловкости", 5, 100,
+    private final Potion dexterityPotion = new Potion("зелье ловкости", 5, 100,
             (hero, potion) -> hero.addDexterity(potion.getEffect()));
-    Potion strengthPotion = new Potion("зелье силы", 5, 50,
+    private final Potion strengthPotion = new Potion("зелье силы", 5, 50,
             (hero, potion) -> hero.addStrength(potion.getEffect()));
 
     public GameWorld(Hero hero) {
         this.hero = hero;
-        this.merchant = new Merchant();
-        this.goblin = new Goblin();
-        this.skeleton = new Skeleton();
     }
 
     public boolean battle(Enemy enemy) {

@@ -1,6 +1,6 @@
 package com.dontexist.potions;
 
-import com.dontexist.characters.Hero;
+import com.dontexist.characters.FairytaleCharacter;
 import lombok.Getter;
 
 import java.util.function.BiConsumer;
@@ -10,16 +10,16 @@ public class Potion {
     private final String printedName;
     private final int effect;
     private final int cost;
-    private final BiConsumer<Hero, Potion> implementation;
+    private final BiConsumer<FairytaleCharacter, Potion> effectImplementation;
 
-    public Potion(String printedName, int effect, int cost, BiConsumer<Hero, Potion> implementation) {
+    public Potion(String printedName, int effect, int cost, BiConsumer<FairytaleCharacter, Potion> effectImplementation) {
         this.printedName = printedName;
         this.effect = effect;
         this.cost = cost;
-        this.implementation = implementation;
+        this.effectImplementation = effectImplementation;
     }
 
-    public void application(Hero hero, Potion potion) {
-        implementation.accept(hero, potion);
+    public void application(FairytaleCharacter character, Potion potion) {
+        effectImplementation.accept(character, potion);
     }
 }
